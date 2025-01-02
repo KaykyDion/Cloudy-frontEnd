@@ -8,10 +8,38 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { Link } from "react-router-dom";
+import { userService } from "../services/cloudyApi";
+import { FormEventHandler, useState } from "react";
+import { z } from "zod";
+
+const RegisterUserSchema = z.object({
+  name: z.string().min(3).max(30),
+  email: z.string().email(),
+  password: z.string().min(8),
+});
 
 export const SignUp: React.FC = () => {
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (ev) => {
+    ev.preventDefault();
+
+    const formData = new FormData(ev.currentTarget);
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    const userData = RegisterUserSchema.parse({ name, email, password });
+
+    const response = await userService.registerUser(userData);
+
+    if (response?.status !== 201) return setErrorMsg(response.message);
+
+    localStorage.setItem("token", JSON.stringify(response.data));
+  };
+
   return (
-    <form action="">
+    <form onSubmit={handleSubmit} onChange={() => setErrorMsg("")}>
       <Flex justify="center">
         <Card>
           <Flex direction="column" gap="4" minWidth="16rem" maxWidth="36rem">
@@ -35,7 +63,17 @@ export const SignUp: React.FC = () => {
               <Text as="label" htmlFor="email">
                 Email:
               </Text>
-              <TextField.Root name="email" id="email" required type="email" />
+              <TextField.Root
+                name="email"
+                id="email"
+                required
+                type="email"
+                mb="1"
+                color={errorMsg ? "red" : "indigo"}
+              />
+              <Text size="1" color="red">
+                {errorMsg}
+              </Text>
             </Box>
             <Box>
               <Text as="label" htmlFor="password">
