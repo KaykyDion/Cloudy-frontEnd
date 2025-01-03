@@ -5,14 +5,18 @@ import router from "./router";
 function App() {
   return (
     <>
-      <Box maxWidth="80rem" mx="auto">
-        <Box>
-          <Heading as="h1" size="8" weight="light" mb="4">
-            Cloudy
-          </Heading>
+      <header>
+        <Box maxWidth="80rem" mx="auto">
+          <Box>
+            <Heading as="h1" size="8" weight="light" mb="4">
+              Cloudy
+            </Heading>
+          </Box>
         </Box>
-      </Box>
-      <RouterProvider router={router} />
+      </header>
+      <main>
+        <RouterProvider router={router} />
+      </main>
     </>
   );
 }

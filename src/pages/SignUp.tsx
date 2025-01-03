@@ -69,6 +69,7 @@ export const SignUp: React.FC = () => {
                 required
                 type="email"
                 mb="1"
+                variant={errorMsg ? "soft" : "surface"}
                 color={errorMsg ? "red" : "indigo"}
               />
               <Text size="1" color="red">

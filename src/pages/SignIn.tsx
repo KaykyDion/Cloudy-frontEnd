@@ -53,6 +53,7 @@ export const SignIn: React.FC = () => {
                 id="email"
                 required
                 type="email"
+                variant={errorMsg ? "soft" : "surface"}
                 color={errorMsg ? "red" : "indigo"}
               />
             </Box>
@@ -65,6 +66,7 @@ export const SignIn: React.FC = () => {
                 id="password"
                 required
                 type="password"
+                variant={errorMsg ? "soft" : "surface"}
                 color={errorMsg ? "red" : "indigo"}
               />
             </Box>
