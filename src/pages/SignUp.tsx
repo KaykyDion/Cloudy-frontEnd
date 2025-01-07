@@ -7,10 +7,11 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userService } from "../services/cloudyApi";
 import { FormEventHandler, useState } from "react";
 import { z } from "zod";
+import useAuthUser from "../store/useAuthUser";
 
 const RegisterUserSchema = z.object({
   name: z.string().min(3).max(30),
@@ -20,6 +21,8 @@ const RegisterUserSchema = z.object({
 
 export const SignUp: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState("");
+  const setAuthUser = useAuthUser((state) => state.setUser);
+  const navigate = useNavigate();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (ev) => {
     ev.preventDefault();
@@ -36,6 +39,10 @@ export const SignUp: React.FC = () => {
     if (response?.status !== 201) return setErrorMsg(response.message);
 
     localStorage.setItem("token", JSON.stringify(response.data));
+
+    await setAuthUser();
+
+    navigate("/feed");
   };
 
   return (

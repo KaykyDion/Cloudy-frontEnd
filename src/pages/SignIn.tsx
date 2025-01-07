@@ -8,9 +8,10 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { FormEventHandler, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { userService } from "../services/cloudyApi";
+import useAuthUser from "../store/useAuthUser";
 
 const LoginUserSchema = z.object({
   email: z.string().email(),
@@ -19,6 +20,8 @@ const LoginUserSchema = z.object({
 
 export const SignIn: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState("");
+  const setAuthUser = useAuthUser((state) => state.setUser);
+  const navigate = useNavigate();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (ev) => {
     ev.preventDefault();
@@ -34,6 +37,10 @@ export const SignIn: React.FC = () => {
     if (response?.status !== 200) return setErrorMsg(response.message);
 
     localStorage.setItem("token", JSON.stringify(response.data));
+
+    await setAuthUser();
+
+    navigate("/feed");
   };
 
   return (
