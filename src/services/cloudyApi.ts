@@ -54,6 +54,19 @@ export const postsService = {
     return response.data.posts;
   },
 
+  async createPost(token: string, content: string) {
+    const response = await axios.post(
+      `${url}/posts`,
+      { content },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  },
+
   async likePost(token: string, postId: string) {
     const response = await axios.post(
       `${url}/posts/${postId}/likes`,
