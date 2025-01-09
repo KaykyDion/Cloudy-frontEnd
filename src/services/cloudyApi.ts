@@ -67,6 +67,15 @@ export const postsService = {
     return response;
   },
 
+  async deletePost(token: string, id: string) {
+    const response = await axios.delete(`${url}/posts/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  },
+
   async likePost(token: string, postId: string) {
     const response = await axios.post(
       `${url}/posts/${postId}/likes`,

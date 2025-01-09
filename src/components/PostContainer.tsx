@@ -58,10 +58,19 @@ export const PostContainer: React.FC = () => {
     });
     await postsService.removeLike(token, postId);
   };
+
+  const handleDeletePost = async (postId: string) => {
+    setFeedPosts((currentState) => {
+      return currentState.filter((post) => post.id !== postId);
+    });
+    await postsService.deletePost(token, postId);
+  };
+
   return (
     <Flex maxWidth="80rem" mx="auto" direction="column" gap={"3"}>
       {feedPosts.map((post) => (
         <PostCard
+          deletePost={handleDeletePost}
           unlikePost={handleUnlikePost}
           likePost={handleLikePost}
           post={post}
