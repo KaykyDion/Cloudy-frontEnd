@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { postsService } from "../services/cloudyApi";
 import { Post } from "../entities/Post";
-import { Flex } from "@radix-ui/themes";
+import { Card, Flex, Skeleton } from "@radix-ui/themes";
 import { PostCard } from "../components/PostCard";
 import { Navigate } from "react-router-dom";
 import useAuthUser from "../store/useAuthUser";
@@ -81,6 +81,19 @@ export const PostContainer: React.FC = () => {
     });
     await postsService.deletePost(token, postId);
   };
+
+  if (feedPosts.length === 0) {
+    const loadingArray = [1, 2, 3, 4, 5];
+    return (
+      <Flex direction={"column"} gap={"3"}>
+        {loadingArray.map((i) => (
+          <Skeleton key={i} height={"154px"}>
+            <Card></Card>
+          </Skeleton>
+        ))}
+      </Flex>
+    );
+  }
 
   return (
     <Flex maxWidth="100%" mx="auto" direction="column" gap={"3"}>
