@@ -19,15 +19,23 @@ import {
   HeartIcon,
 } from "@radix-ui/react-icons";
 import useAuthUser from "../store/useAuthUser";
+import { EditPostModal } from "./EditPostModal";
 
 type Props = {
   post: Post;
   likePost: (postId: string) => void;
   unlikePost: (postId: string) => void;
   deletePost: (postId: string) => void;
+  editPost: (postId: string, content: string) => void;
 };
 
-export const PostCard = ({ post, likePost, unlikePost, deletePost }: Props) => {
+export const PostCard = ({
+  post,
+  likePost,
+  unlikePost,
+  deletePost,
+  editPost,
+}: Props) => {
   const authUser = useAuthUser((state) => state.user);
 
   return (
@@ -48,7 +56,10 @@ export const PostCard = ({ post, likePost, unlikePost, deletePost }: Props) => {
                 </Link>
               </Text>
               {post.ownerId === authUser?.id ? (
-                <Badge color="crimson">You</Badge>
+                <Badge color="crimson">Você</Badge>
+              ) : null}
+              {post.createdAt !== post.updatedAt ? (
+                <Badge color="lime">Editado</Badge>
               ) : null}
             </Flex>
 
@@ -65,6 +76,7 @@ export const PostCard = ({ post, likePost, unlikePost, deletePost }: Props) => {
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
+              <EditPostModal editPost={editPost} post={post} />
               <AlertDialog.Root>
                 <AlertDialog.Trigger>
                   <DropdownMenu.Item
@@ -76,7 +88,9 @@ export const PostCard = ({ post, likePost, unlikePost, deletePost }: Props) => {
                   </DropdownMenu.Item>
                 </AlertDialog.Trigger>
                 <AlertDialog.Content>
-                  <AlertDialog.Title>Excluir a postagem?</AlertDialog.Title>
+                  <AlertDialog.Title color="red">
+                    Excluir a postagem?
+                  </AlertDialog.Title>
                   <AlertDialog.Description size="2">
                     Tem certeza que deseja excluir a postagem?
                   </AlertDialog.Description>

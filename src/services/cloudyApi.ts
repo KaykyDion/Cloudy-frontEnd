@@ -76,6 +76,22 @@ export const postsService = {
     return response;
   },
 
+  async updatePost(token: string, id: string, content: string) {
+    const response = await axios.put(
+      `${url}/posts/${id}`,
+      {
+        content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response;
+  },
+
   async likePost(token: string, postId: string) {
     const response = await axios.post(
       `${url}/posts/${postId}/likes`,

@@ -6,7 +6,7 @@ import { Feed } from "./pages/Feed";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/login" />,
+    element: <Navigate to="/feed" />,
   },
   {
     path: "/login",
