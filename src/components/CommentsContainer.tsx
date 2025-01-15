@@ -20,7 +20,7 @@ export const CommentsContainer = ({ post }: Props) => {
         <Dialog.Title size={"7"}>Comentários</Dialog.Title>
         <Flex gap={"3"} direction={"column"}>
           {post.comments.map((comment) => (
-            <Comment comment={comment} />
+            <Comment key={comment.id} comment={comment} />
           ))}
         </Flex>
         {post.comments.length === 0 && (

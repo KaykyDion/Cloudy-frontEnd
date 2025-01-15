@@ -3,23 +3,28 @@ import { postsService } from "../services/cloudyApi";
 import { Post } from "../entities/Post";
 import { Card, Flex, Skeleton } from "@radix-ui/themes";
 import { PostCard } from "../components/PostCard";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import useAuthUser from "../store/useAuthUser";
 
 export const PostContainer: React.FC = () => {
   const [feedPosts, setFeedPosts] = useState<Post[]>([]);
   const token = localStorage.getItem("token")?.split(`"`).join("");
   const authUser = useAuthUser((state) => state.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
       if (token) {
-        const posts = await postsService.getPosts(token);
-        setFeedPosts(posts);
+        try {
+          const posts = await postsService.getPosts(token);
+          setFeedPosts(posts);
+        } catch (error) {
+          if (error) navigate("/login");
+        }
       }
     };
     fetchPosts();
-  }, [token]);
+  }, [token, navigate]);
 
   if (!token) return <Navigate to={"/login"} />;
 
