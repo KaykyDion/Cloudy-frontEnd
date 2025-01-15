@@ -13,13 +13,13 @@ import {
 } from "@radix-ui/themes";
 import { Post } from "../entities/Post";
 import {
-  ChatBubbleIcon,
   DotsHorizontalIcon,
   HeartFilledIcon,
   HeartIcon,
 } from "@radix-ui/react-icons";
 import useAuthUser from "../store/useAuthUser";
 import { EditPostModal } from "./EditPostModal";
+import { CommentsContainer } from "./CommentsContainer";
 
 type Props = {
   post: Post;
@@ -42,12 +42,7 @@ export const PostCard = ({
     <Card key={post.id}>
       <Flex justify={"between"}>
         <Flex gap={"3"} mb={"3"}>
-          <Avatar
-            size="4"
-            src="https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?&w=64&h=64&dpr=2&q=70&crop=focalpoint&fp-x=0.67&fp-y=0.5&fp-z=1.4&fit=crop"
-            radius="full"
-            fallback="T"
-          />
+          <Avatar size="4" radius="full" fallback={post.owner.name[0]} />
           <Box>
             <Flex align={"center"} gap={"2"}>
               <Text as="div" size="3" weight="bold">
@@ -62,7 +57,6 @@ export const PostCard = ({
                 <Badge color="lime">Editado</Badge>
               ) : null}
             </Flex>
-
             <Text as="div" size="3" color="gray">
               {post.owner.email}
             </Text>
@@ -143,12 +137,8 @@ export const PostCard = ({
             </Button>
           )}
         </Flex>
-
         <Flex gap={"1"} align={"center"}>
-          <Button variant="surface">
-            <Text>{post.comments.length}</Text>
-            <ChatBubbleIcon />
-          </Button>
+          <CommentsContainer post={post} />
         </Flex>
       </Flex>
     </Card>
