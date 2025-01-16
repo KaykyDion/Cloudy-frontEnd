@@ -1,14 +1,16 @@
 import { Button, Dialog, DropdownMenu, Flex, TextArea } from "@radix-ui/themes";
 import { Post } from "../entities/Post";
 import { useState } from "react";
+import usePosts from "../store/usePosts";
 
 type Props = {
   post: Post;
-  editPost: (postId: string, content: string) => void;
 };
 
-export const EditPostModal = ({ post, editPost }: Props) => {
+export const EditPostModal = ({ post }: Props) => {
   const [content, setContent] = useState(post.content);
+  const { editPost } = usePosts((state) => state);
+
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -28,7 +30,6 @@ export const EditPostModal = ({ post, editPost }: Props) => {
         <form
           onSubmit={(ev) => {
             ev.preventDefault();
-            editPost(post.id, content);
           }}
         >
           <TextArea
@@ -47,7 +48,11 @@ export const EditPostModal = ({ post, editPost }: Props) => {
               </Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button type="submit" color="grass">
+              <Button
+                onClick={() => editPost(post.id, content)}
+                type="submit"
+                color="grass"
+              >
                 Confirmar
               </Button>
             </Dialog.Close>

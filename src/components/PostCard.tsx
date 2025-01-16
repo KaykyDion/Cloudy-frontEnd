@@ -20,23 +20,18 @@ import {
 import useAuthUser from "../store/useAuthUser";
 import { EditPostModal } from "./EditPostModal";
 import { CommentsContainer } from "./CommentsContainer";
+import usePosts from "../store/usePosts";
+import { Navigate } from "react-router-dom";
 
 type Props = {
   post: Post;
-  likePost: (postId: string) => void;
-  unlikePost: (postId: string) => void;
-  deletePost: (postId: string) => void;
-  editPost: (postId: string, content: string) => void;
 };
 
-export const PostCard = ({
-  post,
-  likePost,
-  unlikePost,
-  deletePost,
-  editPost,
-}: Props) => {
+export const PostCard = ({ post }: Props) => {
   const authUser = useAuthUser((state) => state.user);
+  const { deletePost, likePost, unlikePost } = usePosts((state) => state);
+
+  if (!authUser) return <Navigate to={"/login"} />;
 
   return (
     <Card key={post.id}>
@@ -70,7 +65,7 @@ export const PostCard = ({
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
-              <EditPostModal editPost={editPost} post={post} />
+              <EditPostModal post={post} />
               <AlertDialog.Root>
                 <AlertDialog.Trigger>
                   <DropdownMenu.Item
@@ -119,7 +114,7 @@ export const PostCard = ({
         <Flex gap={"1"} align={"center"}>
           {post.likes.find((user) => user.id === authUser?.id) ? (
             <Button
-              onClick={() => unlikePost(post.id)}
+              onClick={() => unlikePost(post.id, authUser)}
               variant="surface"
               color="ruby"
             >
@@ -128,7 +123,7 @@ export const PostCard = ({
             </Button>
           ) : (
             <Button
-              onClick={() => likePost(post.id)}
+              onClick={() => likePost(post.id, authUser)}
               variant="surface"
               color="ruby"
             >
