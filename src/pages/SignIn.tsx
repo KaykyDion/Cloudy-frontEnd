@@ -36,7 +36,7 @@ export const SignIn: React.FC = () => {
 
     if (response?.status !== 200) return setErrorMsg(response.message);
 
-    localStorage.setItem("token", JSON.stringify(response.data));
+    localStorage.setItem("token", response.data);
 
     await setAuthUser();
 

@@ -38,7 +38,7 @@ export const SignUp: React.FC = () => {
 
     if (response?.status !== 201) return setErrorMsg(response.message);
 
-    localStorage.setItem("token", JSON.stringify(response.data));
+    localStorage.setItem("token", response.data);
 
     await setAuthUser();
 

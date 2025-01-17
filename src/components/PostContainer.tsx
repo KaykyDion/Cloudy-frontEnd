@@ -6,7 +6,7 @@ import usePosts from "../store/usePosts";
 
 export const PostContainer: React.FC = () => {
   const { posts, setPosts } = usePosts((state) => state);
-  const token = localStorage.getItem("token")?.split(`"`).join("");
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export const PostContainer: React.FC = () => {
       }
     };
     fetchPosts();
-  }, [token, navigate, setPosts]);
+  }, [token, navigate, setPosts, posts]);
 
   if (!token) return <Navigate to={"/login"} />;
 

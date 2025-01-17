@@ -4,7 +4,7 @@ import { postsService } from "../services/cloudyApi";
 import { Navigate } from "react-router-dom";
 
 export const CreatePostForm: React.FC = () => {
-  const token = localStorage.getItem("token")?.split(`"`).join("");
+  const token = localStorage.getItem("token");
 
   if (!token) return <Navigate to={"/login"} />;
 

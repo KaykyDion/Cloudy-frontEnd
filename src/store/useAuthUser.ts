@@ -18,7 +18,7 @@ interface UseAuthUser {
 const useAuthUser = create<UseAuthUser>((set) => ({
   user: null,
   setUser: async () => {
-    const token = localStorage.getItem("token")?.split('"').join("");
+    const token = localStorage.getItem("token");
 
     if (token) {
       const decodedUser = jwtDecode(token) as DecodedUser;

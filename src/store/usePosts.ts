@@ -12,7 +12,7 @@ interface UsePosts {
   unlikePost: (postId: string, authUser: User) => Promise<void>;
 }
 
-const token = localStorage.getItem("token")?.split('"').join("");
+const token = localStorage.getItem("token");
 
 const usePosts = create<UsePosts>((set) => ({
   posts: [],
