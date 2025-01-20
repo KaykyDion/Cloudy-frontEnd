@@ -2,6 +2,7 @@ import { Button, Dialog, Flex, Text } from "@radix-ui/themes";
 import { Post } from "../entities/Post";
 import { ChatBubbleIcon } from "@radix-ui/react-icons";
 import { Comment } from "./Comment";
+import { CreateCommentForm } from "./CreateCommentForm";
 
 type Props = {
   post: Post;
@@ -16,9 +17,11 @@ export const CommentsContainer = ({ post }: Props) => {
           <ChatBubbleIcon />
         </Button>
       </Dialog.Trigger>
-      <Dialog.Content>
+      <Dialog.Content aria-describedby={undefined}>
         <Dialog.Title size={"7"}>Comentários</Dialog.Title>
         <Flex gap={"3"} direction={"column"}>
+          <CreateCommentForm post={post} />
+
           {post.comments.map((comment) => (
             <Comment key={comment.id} comment={comment} />
           ))}

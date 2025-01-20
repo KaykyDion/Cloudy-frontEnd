@@ -1,6 +1,6 @@
 import axios from "axios";
 import { RegisterUserData, User } from "../entities/User";
-import { SearchPostsResponse } from "../entities/Post";
+import { PostComment, SearchPostsResponse } from "../entities/Post";
 
 const url = import.meta.env.VITE_CLOUDY_API_URL;
 
@@ -111,6 +111,21 @@ export const postsService = {
         Authorization: `Bearer ${token}`,
       },
     });
+    return response;
+  },
+
+  async createComment(token: string, postId: string, content: string) {
+    const response = await axios.post<PostComment>(
+      `${url}/posts/${postId}/comments`,
+      {
+        content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response;
   },
 };

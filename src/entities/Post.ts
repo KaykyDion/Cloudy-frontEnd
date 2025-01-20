@@ -14,7 +14,6 @@ export interface Post {
     content: string;
     owner: {
       name: string;
-      email: string;
     };
     _count: {
       likes: number;
@@ -27,7 +26,6 @@ export interface PostComment {
   content: string;
   owner: {
     name: string;
-    email: string;
   };
   _count: {
     likes: number;

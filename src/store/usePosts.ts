@@ -10,13 +10,17 @@ interface UsePosts {
   deletePost: (postId: string) => Promise<void>;
   likePost: (postId: string, authUser: User) => Promise<void>;
   unlikePost: (postId: string, authUser: User) => Promise<void>;
+  createComment: (
+    postId: string,
+    content: string,
+    authUser: User
+  ) => Promise<void>;
 }
-
-const token = localStorage.getItem("token");
 
 const usePosts = create<UsePosts>((set) => ({
   posts: [],
   setPosts: async () => {
+    const token = localStorage.getItem("token");
     if (token) {
       const response = await postsService.getPosts(token);
       set({ posts: response });
@@ -24,6 +28,7 @@ const usePosts = create<UsePosts>((set) => ({
   },
 
   editPost: async (postId: string, content: string) => {
+    const token = localStorage.getItem("token");
     if (token) {
       set((state) => ({
         posts: state.posts.map((post) => {
@@ -42,6 +47,8 @@ const usePosts = create<UsePosts>((set) => ({
   },
 
   deletePost: async (postId: string) => {
+    const token = localStorage.getItem("token");
+
     if (token) {
       set((state) => ({
         posts: state.posts.filter((post) => post.id !== postId),
@@ -50,7 +57,31 @@ const usePosts = create<UsePosts>((set) => ({
     }
   },
 
+  createComment: async (postId: string, content: string, authUser: User) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const response = await postsService.createComment(token, postId, content);
+    if (response.status !== 201) return;
+
+    set((state) => ({
+      posts: state.posts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            comments: [
+              ...post.comments,
+              { ...response.data, owner: { name: authUser.name } },
+            ],
+          };
+        }
+        return post;
+      }),
+    }));
+  },
+
   likePost: async (postId: string, authUser: User) => {
+    const token = localStorage.getItem("token");
     if (token) {
       set((state) => ({
         posts: state.posts.map((post) => {
@@ -74,6 +105,7 @@ const usePosts = create<UsePosts>((set) => ({
   },
 
   unlikePost: async (postId: string, authUser: User) => {
+    const token = localStorage.getItem("token");
     if (token) {
       set((state) => ({
         posts: state.posts.map((post) => {

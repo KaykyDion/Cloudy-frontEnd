@@ -20,7 +20,7 @@ export const PostContainer: React.FC = () => {
       }
     };
     fetchPosts();
-  }, [token, navigate, setPosts, posts]);
+  }, [token, navigate, setPosts]);
 
   if (!token) return <Navigate to={"/login"} />;
 
