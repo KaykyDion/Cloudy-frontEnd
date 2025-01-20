@@ -128,4 +128,17 @@ export const postsService = {
     );
     return response;
   },
+
+  async likeComment(token: string, postId: string, commentId: string) {
+    const response = await axios.post(
+      `${url}/posts/${postId}/comments/${commentId}/likes`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  },
 };

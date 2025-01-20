@@ -9,27 +9,21 @@ export interface Post {
     email: string;
   };
   likes: { id: string; name: string }[];
-  comments: {
-    id: string;
-    content: string;
-    owner: {
-      name: string;
-    };
-    _count: {
-      likes: number;
-    };
-  }[];
+  comments: PostComment[];
 }
 
 export interface PostComment {
   id: string;
   content: string;
+  createdAt: Date;
+  updatedAt: string;
   owner: {
     name: string;
   };
-  _count: {
-    likes: number;
-  };
+  likes: {
+    name: string;
+    id: string;
+  }[];
 }
 
 export interface SearchPostsResponse {

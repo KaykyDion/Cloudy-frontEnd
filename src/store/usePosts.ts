@@ -15,6 +15,11 @@ interface UsePosts {
     content: string,
     authUser: User
   ) => Promise<void>;
+  likeComment: (
+    postId: string,
+    commentId: string,
+    authUser: User
+  ) => Promise<void>;
 }
 
 const usePosts = create<UsePosts>((set) => ({
@@ -57,29 +62,6 @@ const usePosts = create<UsePosts>((set) => ({
     }
   },
 
-  createComment: async (postId: string, content: string, authUser: User) => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const response = await postsService.createComment(token, postId, content);
-    if (response.status !== 201) return;
-
-    set((state) => ({
-      posts: state.posts.map((post) => {
-        if (post.id === postId) {
-          return {
-            ...post,
-            comments: [
-              ...post.comments,
-              { ...response.data, owner: { name: authUser.name } },
-            ],
-          };
-        }
-        return post;
-      }),
-    }));
-  },
-
   likePost: async (postId: string, authUser: User) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -120,6 +102,55 @@ const usePosts = create<UsePosts>((set) => ({
       }));
       await postsService.removeLike(token, postId);
     }
+  },
+
+  createComment: async (postId: string, content: string, authUser: User) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const response = await postsService.createComment(token, postId, content);
+    if (response.status !== 201) return;
+
+    set((state) => ({
+      posts: state.posts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            comments: [
+              ...post.comments,
+              { ...response.data, owner: { name: authUser.name } },
+            ],
+          };
+        }
+        return post;
+      }),
+    }));
+  },
+
+  likeComment: async (postId: string, commentId: string, authUser: User) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    set((state) => ({
+      posts: state.posts.map((post) => {
+        if (post.id === postId) {
+          const updatedComments = post.comments.map((comment) => {
+            if (comment.id === commentId) {
+              return {
+                ...comment,
+                likes: [
+                  ...comment.likes,
+                  { name: authUser.name, id: authUser.id },
+                ],
+              };
+            }
+            return comment;
+          });
+          return { ...post, comments: updatedComments };
+        }
+        return post;
+      }),
+    }));
+    await postsService.likeComment(token, postId, commentId);
   },
 }));
 
