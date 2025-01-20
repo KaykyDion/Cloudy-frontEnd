@@ -141,4 +141,16 @@ export const postsService = {
     );
     return response;
   },
+
+  async unlikeComment(token: string, postId: string, commentId: string) {
+    const response = await axios.delete(
+      `${url}/posts/${postId}/comments/${commentId}/likes`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  },
 };

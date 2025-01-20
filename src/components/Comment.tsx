@@ -12,7 +12,7 @@ type Props = {
 
 export const Comment = ({ comment, postId }: Props) => {
   const authUser = useAuthUser((state) => state.user);
-  const { likeComment } = usePosts((state) => state);
+  const { likeComment, unlikeComment } = usePosts((state) => state);
 
   if (!authUser) return <Navigate to={"/login"} />;
 
@@ -33,7 +33,11 @@ export const Comment = ({ comment, postId }: Props) => {
       <Text>{comment.content}</Text>
       <Flex justify={"end"}>
         {comment.likes.find((user) => user.id === authUser?.id) ? (
-          <Button variant="surface" color="ruby">
+          <Button
+            onClick={() => unlikeComment(postId, comment.id, authUser)}
+            variant="surface"
+            color="ruby"
+          >
             <Text>{comment.likes.length}</Text>
             <HeartFilledIcon />
           </Button>

@@ -20,6 +20,11 @@ interface UsePosts {
     commentId: string,
     authUser: User
   ) => Promise<void>;
+  unlikeComment: (
+    postId: string,
+    commentId: string,
+    authUser: User
+  ) => Promise<void>;
 }
 
 const usePosts = create<UsePosts>((set) => ({
@@ -118,7 +123,7 @@ const usePosts = create<UsePosts>((set) => ({
             ...post,
             comments: [
               ...post.comments,
-              { ...response.data, owner: { name: authUser.name } },
+              { ...response.data, owner: { name: authUser.name }, likes: [] },
             ],
           };
         }
@@ -151,6 +156,29 @@ const usePosts = create<UsePosts>((set) => ({
       }),
     }));
     await postsService.likeComment(token, postId, commentId);
+  },
+
+  unlikeComment: async (postId: string, commentId: string, authUser: User) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    set((state) => ({
+      posts: state.posts.map((post) => {
+        if (post.id === postId) {
+          const updatedComment = post.comments.map((comment) => {
+            if (comment.id === commentId) {
+              const updatedLikes = comment.likes.filter(
+                (like) => like.id !== authUser.id
+              );
+              return { ...comment, likes: updatedLikes };
+            }
+            return comment;
+          });
+          return { ...post, comments: updatedComment };
+        }
+        return post;
+      }),
+    }));
+    await postsService.unlikeComment(token, postId, commentId);
   },
 }));
 
