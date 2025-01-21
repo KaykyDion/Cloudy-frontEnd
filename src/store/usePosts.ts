@@ -15,6 +15,7 @@ interface UsePosts {
     content: string,
     authUser: User
   ) => Promise<void>;
+  deleteComment: (postId: string, commentId: string) => Promise<void>;
   likeComment: (
     postId: string,
     commentId: string,
@@ -130,6 +131,26 @@ const usePosts = create<UsePosts>((set) => ({
         return post;
       }),
     }));
+  },
+
+  deleteComment: async (postId: string, commentId: string) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    set((state) => ({
+      posts: state.posts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            comments: post.comments.filter(
+              (comment) => comment.id !== commentId
+            ),
+          };
+        }
+        return post;
+      }),
+    }));
+    await postsService.deleteComment(token, postId, commentId);
   },
 
   likeComment: async (postId: string, commentId: string, authUser: User) => {

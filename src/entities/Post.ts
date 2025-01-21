@@ -17,6 +17,7 @@ export interface PostComment {
   content: string;
   createdAt: Date;
   updatedAt: string;
+  ownerId: string;
   owner: {
     name: string;
   };

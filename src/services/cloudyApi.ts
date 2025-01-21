@@ -129,6 +129,18 @@ export const postsService = {
     return response;
   },
 
+  async deleteComment(token: string, postId: string, commentId: string) {
+    const response = await axios.delete(
+      `${url}/posts/${postId}/comments/${commentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  },
+
   async likeComment(token: string, postId: string, commentId: string) {
     const response = await axios.post(
       `${url}/posts/${postId}/comments/${commentId}/likes`,
