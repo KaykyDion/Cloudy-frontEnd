@@ -1,15 +1,37 @@
 import { Button, Dialog, DropdownMenu, Flex, TextArea } from "@radix-ui/themes";
-import { Post } from "../entities/Post";
+import { Post, PostComment } from "../entities/Post";
 import { useState } from "react";
 import usePosts from "../store/usePosts";
 
 type Props = {
   post: Post;
+  comment?: PostComment;
+  itemToEdit: "post" | "comment";
 };
 
-export const EditPostModal = ({ post }: Props) => {
-  const [content, setContent] = useState(post.content);
-  const { editPost } = usePosts((state) => state);
+export const EditPostModal = ({ post, comment, itemToEdit }: Props) => {
+  const [content, setContent] = useState(
+    comment ? comment.content : post.content
+  );
+  const { editPost, editComment } = usePosts((state) => state);
+  const texts = {
+    modalTitle:
+      itemToEdit === "comment" ? "Editar comentário" : "Editar postagem",
+    modalDescription:
+      itemToEdit === "comment"
+        ? "Faça alterações no seu comentário"
+        : "Faça alterações na sua postagem",
+  };
+
+  const handleSubmit = () => {
+    if (itemToEdit === "post") {
+      editPost(post.id, content);
+    }
+
+    if (itemToEdit === "comment" && comment) {
+      editComment(post.id, comment.id, content);
+    }
+  };
 
   return (
     <Dialog.Root>
@@ -23,9 +45,9 @@ export const EditPostModal = ({ post }: Props) => {
         </DropdownMenu.Item>
       </Dialog.Trigger>
       <Dialog.Content>
-        <Dialog.Title color="yellow">Editar postagem</Dialog.Title>
+        <Dialog.Title color="yellow">{texts.modalTitle}</Dialog.Title>
         <Dialog.Description mb={"2"}>
-          Faça alterações na sua postagem
+          {texts.modalDescription}
         </Dialog.Description>
         <form
           onSubmit={(ev) => {
@@ -48,11 +70,7 @@ export const EditPostModal = ({ post }: Props) => {
               </Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button
-                onClick={() => editPost(post.id, content)}
-                type="submit"
-                color="grass"
-              >
+              <Button onClick={handleSubmit} type="submit" color="grass">
                 Confirmar
               </Button>
             </Dialog.Close>

@@ -129,6 +129,26 @@ export const postsService = {
     return response;
   },
 
+  async editComment(
+    token: string,
+    postId: string,
+    commentId: string,
+    content: string
+  ) {
+    const response = await axios.put(
+      `${url}/posts/${postId}/comments/${commentId}`,
+      {
+        content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  },
+
   async deleteComment(token: string, postId: string, commentId: string) {
     const response = await axios.delete(
       `${url}/posts/${postId}/comments/${commentId}`,

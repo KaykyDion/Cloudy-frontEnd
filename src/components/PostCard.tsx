@@ -65,7 +65,7 @@ export const PostCard = ({ post }: Props) => {
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
-              <EditPostModal post={post} />
+              <EditPostModal itemToEdit="post" post={post} />
               <AlertDialog.Root>
                 <AlertDialog.Trigger>
                   <DropdownMenu.Item

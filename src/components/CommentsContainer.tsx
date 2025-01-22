@@ -24,7 +24,7 @@ export const CommentsContainer = ({ post }: Props) => {
             <CreateCommentForm post={post} />
 
             {post.comments.map((comment) => (
-              <Comment key={comment.id} comment={comment} postId={post.id} />
+              <Comment key={comment.id} comment={comment} post={post} />
             ))}
           </Flex>
           {post.comments.length === 0 && (

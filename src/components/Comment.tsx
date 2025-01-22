@@ -9,7 +9,7 @@ import {
   Link,
   Text,
 } from "@radix-ui/themes";
-import { PostComment } from "../entities/Post";
+import { Post, PostComment } from "../entities/Post";
 import {
   DotsHorizontalIcon,
   HeartFilledIcon,
@@ -18,13 +18,14 @@ import {
 import useAuthUser from "../store/useAuthUser";
 import usePosts from "../store/usePosts";
 import { Navigate } from "react-router-dom";
+import { EditPostModal } from "./EditPostModal";
 
 type Props = {
   comment: PostComment;
-  postId: string;
+  post: Post;
 };
 
-export const Comment = ({ comment, postId }: Props) => {
+export const Comment = ({ comment, post }: Props) => {
   const authUser = useAuthUser((state) => state.user);
   const { likeComment, unlikeComment, deleteComment } = usePosts(
     (state) => state
@@ -55,6 +56,11 @@ export const Comment = ({ comment, postId }: Props) => {
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
+              <EditPostModal
+                itemToEdit="comment"
+                comment={comment}
+                post={post}
+              />
               <AlertDialog.Root>
                 <AlertDialog.Trigger>
                   <DropdownMenu.Item
@@ -82,7 +88,7 @@ export const Comment = ({ comment, postId }: Props) => {
                       <Button
                         variant="solid"
                         color="red"
-                        onClick={() => deleteComment(postId, comment.id)}
+                        onClick={() => deleteComment(post.id, comment.id)}
                       >
                         Excluir
                       </Button>
@@ -98,7 +104,7 @@ export const Comment = ({ comment, postId }: Props) => {
       <Flex justify={"end"}>
         {comment.likes.find((user) => user.id === authUser?.id) ? (
           <Button
-            onClick={() => unlikeComment(postId, comment.id, authUser)}
+            onClick={() => unlikeComment(post.id, comment.id, authUser)}
             variant="surface"
             color="ruby"
           >
@@ -107,7 +113,7 @@ export const Comment = ({ comment, postId }: Props) => {
           </Button>
         ) : (
           <Button
-            onClick={() => likeComment(postId, comment.id, authUser)}
+            onClick={() => likeComment(post.id, comment.id, authUser)}
             variant="surface"
             color="ruby"
           >
