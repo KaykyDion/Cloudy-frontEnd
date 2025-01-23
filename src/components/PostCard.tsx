@@ -8,7 +8,6 @@ import {
   DropdownMenu,
   Flex,
   Heading,
-  Link,
   Text,
 } from "@radix-ui/themes";
 import { Post } from "../entities/Post";
@@ -21,7 +20,7 @@ import useAuthUser from "../store/useAuthUser";
 import { EditPostModal } from "./EditPostModal";
 import { CommentsContainer } from "./CommentsContainer";
 import usePosts from "../store/usePosts";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 type Props = {
   post: Post;
@@ -41,9 +40,7 @@ export const PostCard = ({ post }: Props) => {
           <Box>
             <Flex align={"center"} gap={"2"}>
               <Text as="div" size="3" weight="bold">
-                <Link href="#" color="indigo">
-                  {post.owner.name}
-                </Link>
+                <Link to={`/users/${post.ownerId}`}>{post.owner.name}</Link>
               </Text>
               {post.ownerId === authUser?.id ? (
                 <Badge color="crimson">Você</Badge>
@@ -53,7 +50,7 @@ export const PostCard = ({ post }: Props) => {
               ) : null}
             </Flex>
             <Text as="div" size="3" color="gray">
-              {post.owner.email}
+              {post.createdAt.toLocaleString()}
             </Text>
           </Box>
         </Flex>

@@ -38,7 +38,7 @@ export const PostContainer: React.FC = () => {
   }
 
   return (
-    <Flex maxWidth="100%" mx="auto" direction="column" gap={"3"}>
+    <Flex width="100%" mx="auto" direction="column" gap={"3"}>
       {posts.map((post) => (
         <PostCard post={post} key={post.id} />
       ))}

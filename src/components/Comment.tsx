@@ -101,7 +101,7 @@ export const Comment = ({ comment, post }: Props) => {
         )}
       </Flex>
       <Text>{comment.content}</Text>
-      <Flex justify={"end"}>
+      <Flex mt={"3"} justify={"end"}>
         {comment.likes.find((user) => user.id === authUser?.id) ? (
           <Button
             onClick={() => unlikeComment(post.id, comment.id, authUser)}
