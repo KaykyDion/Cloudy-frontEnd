@@ -5,7 +5,8 @@ import { User } from "../entities/User";
 
 interface UsePosts {
   posts: Post[];
-  setPosts: () => Promise<void>;
+  setPosts: (posts: Post[]) => void;
+  clearPosts: () => void;
   editPost: (postId: string, content: string) => Promise<void>;
   deletePost: (postId: string) => Promise<void>;
   likePost: (postId: string, authUser: User) => Promise<void>;
@@ -35,12 +36,12 @@ interface UsePosts {
 
 const usePosts = create<UsePosts>((set) => ({
   posts: [],
-  setPosts: async () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const response = await postsService.getPosts(token);
-      set({ posts: response });
-    }
+  setPosts: (posts: Post[]) => {
+    set({ posts });
+  },
+
+  clearPosts: () => {
+    set({ posts: [] });
   },
 
   editPost: async (postId: string, content: string) => {
