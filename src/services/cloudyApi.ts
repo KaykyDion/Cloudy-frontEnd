@@ -39,6 +39,30 @@ export const userService = {
 
     return response;
   },
+
+  async followUser(userId: string, token: string) {
+    const response = await axios.post(
+      `${url}/users/${userId}/followers`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response;
+  },
+
+  async unfollowUser(userId: string, token: string) {
+    const response = await axios.delete(`${url}/users/${userId}/followers`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response;
+  },
 };
 
 export const postsService = {
