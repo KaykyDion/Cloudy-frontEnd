@@ -6,6 +6,12 @@ export interface RegisterUserData {
   password: string;
 }
 
+export interface UpdateUserData {
+  name?: string;
+  bio?: string;
+  profilePhoto?: string;
+}
+
 export interface User {
   id: string;
   name: string;

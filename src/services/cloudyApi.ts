@@ -1,5 +1,5 @@
 import axios from "axios";
-import { RegisterUserData, User } from "../entities/User";
+import { RegisterUserData, UpdateUserData, User } from "../entities/User";
 import { PostComment, SearchPostsResponse } from "../entities/Post";
 
 const url = import.meta.env.VITE_CLOUDY_API_URL;
@@ -13,6 +13,22 @@ export const userService = {
           return { ...err.response.data, status: err.response.status };
         }
       });
+    return response;
+  },
+
+  async updateUser(userId: string, token: string, attributes: UpdateUserData) {
+    const response = axios.put(
+      `${url}/users/${userId}`,
+      {
+        ...attributes,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
     return response;
   },
 

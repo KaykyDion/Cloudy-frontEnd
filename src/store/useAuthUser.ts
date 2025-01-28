@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { userService } from "../services/cloudyApi";
-import { User } from "../entities/User";
+import { UpdateUserData, User } from "../entities/User";
 import { jwtDecode } from "jwt-decode";
 
 interface DecodedUser {
@@ -13,9 +13,10 @@ interface DecodedUser {
 interface UseAuthUser {
   user: User | null;
   setUser: () => Promise<void>;
+  updateUser: (attributes: UpdateUserData) => Promise<void>;
 }
 
-const useAuthUser = create<UseAuthUser>((set) => ({
+const useAuthUser = create<UseAuthUser>((set, get) => ({
   user: null,
   setUser: async () => {
     const token = localStorage.getItem("token");
@@ -27,6 +28,13 @@ const useAuthUser = create<UseAuthUser>((set) => ({
         set({ user: response.data });
       }
     }
+  },
+
+  updateUser: async (attributes: UpdateUserData) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    set((state) => ({ user: { ...state.user!, ...attributes } }));
+    await userService.updateUser(get().user!.id, token, attributes);
   },
 }));
 
