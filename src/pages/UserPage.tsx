@@ -11,6 +11,8 @@ export const UserPage = () => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
+  window.scrollTo({ top: 0 });
+
   useEffect(() => {
     if (token) {
       const fetchUser = async () => {

@@ -30,6 +30,10 @@ export const PostCard = ({ post }: Props) => {
   const authUser = useAuthUser((state) => state.user);
   const { deletePost, likePost, unlikePost } = usePosts((state) => state);
 
+  const postDate = new Date(post.createdAt);
+
+  console.log(postDate);
+
   return (
     <Card key={post.id}>
       <Flex justify={"between"}>
@@ -48,7 +52,7 @@ export const PostCard = ({ post }: Props) => {
               ) : null}
             </Flex>
             <Text as="div" size="3" color="gray">
-              {post.createdAt.toLocaleString()}
+              {`${postDate.toLocaleDateString()} às ${postDate.toLocaleTimeString()}`}
             </Text>
           </Box>
         </Flex>
