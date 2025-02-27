@@ -3,11 +3,26 @@ import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
 import { Feed } from "./pages/Feed";
 import { UserPage } from "./pages/UserPage";
+import RootLayout from "./pages/RootLayout";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/feed" />,
+    element: <RootLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Navigate to="/feed" />,
+      },
+      {
+        path: "/feed",
+        element: <Feed />,
+      },
+      {
+        path: "/users/:id",
+        element: <UserPage />,
+      },
+    ],
   },
   {
     path: "/login",
@@ -16,14 +31,6 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <SignUp />,
-  },
-  {
-    path: "/feed",
-    element: <Feed />,
-  },
-  {
-    path: "/users/:id",
-    element: <UserPage />,
   },
 ]);
 

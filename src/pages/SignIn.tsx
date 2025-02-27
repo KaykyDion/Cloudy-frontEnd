@@ -45,7 +45,15 @@ export const SignIn: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} onChange={() => setErrorMsg("")}>
-      <Flex justify="center">
+      <Flex
+        height={"80vh"}
+        justify="center"
+        align={"center"}
+        direction={"column"}
+      >
+        <Heading as="h1" size="8" weight="light" mb="4">
+          Cloudy
+        </Heading>
         <Card>
           <Flex direction="column" gap="4" minWidth="16rem" maxWidth="36rem">
             <Heading as="h2" weight="light" mx="auto">
