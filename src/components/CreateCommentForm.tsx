@@ -3,7 +3,6 @@ import usePosts from "../store/usePosts";
 import { FormEventHandler, useState } from "react";
 import { Post } from "../entities/Post";
 import useAuthUser from "../store/useAuthUser";
-import { Navigate } from "react-router-dom";
 
 type Props = {
   post: Post;
@@ -14,11 +13,9 @@ export const CreateCommentForm = ({ post }: Props) => {
   const { user } = useAuthUser((state) => state);
   const [content, setContent] = useState("");
 
-  if (!user) return <Navigate to={"/login"} />;
-
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (ev) => {
     ev.preventDefault();
-    await createComment(post.id, content, user);
+    await createComment(post.id, content, user!);
     setContent("");
   };
 

@@ -1,4 +1,4 @@
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { userService } from "../services/cloudyApi";
 import { useEffect, useState } from "react";
 import { User } from "../entities/User";
@@ -9,12 +9,17 @@ export const UserPage = () => {
   const { id } = useParams();
   const [user, setUser] = useState<User>();
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
       const fetchUser = async () => {
-        const { data } = await userService.getUserById(id!, token);
-        setUser(data);
+        try {
+          const { data } = await userService.getUserById(id!, token);
+          setUser(data);
+        } catch (error) {
+          if (error) navigate("/login");
+        }
       };
       fetchUser();
     }

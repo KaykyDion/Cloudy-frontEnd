@@ -17,7 +17,6 @@ import {
 } from "@radix-ui/react-icons";
 import useAuthUser from "../store/useAuthUser";
 import usePosts from "../store/usePosts";
-import { Navigate } from "react-router-dom";
 import { EditPostModal } from "./EditPostModal";
 
 type Props = {
@@ -30,8 +29,6 @@ export const Comment = ({ comment, post }: Props) => {
   const { likeComment, unlikeComment, deleteComment } = usePosts(
     (state) => state
   );
-
-  if (!authUser) return <Navigate to={"/login"} />;
 
   return (
     <Card>
@@ -48,7 +45,7 @@ export const Comment = ({ comment, post }: Props) => {
             </Flex>
           </Box>
         </Flex>
-        {authUser.id === comment.ownerId && (
+        {authUser!.id === comment.ownerId && (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <Button style={{ background: "none", cursor: "pointer" }}>
@@ -104,7 +101,7 @@ export const Comment = ({ comment, post }: Props) => {
       <Flex mt={"3"} justify={"end"}>
         {comment.likes.find((user) => user.id === authUser?.id) ? (
           <Button
-            onClick={() => unlikeComment(post.id, comment.id, authUser)}
+            onClick={() => unlikeComment(post.id, comment.id, authUser!)}
             variant="surface"
             color="ruby"
           >
@@ -113,7 +110,7 @@ export const Comment = ({ comment, post }: Props) => {
           </Button>
         ) : (
           <Button
-            onClick={() => likeComment(post.id, comment.id, authUser)}
+            onClick={() => likeComment(post.id, comment.id, authUser!)}
             variant="surface"
             color="ruby"
           >

@@ -20,7 +20,7 @@ import useAuthUser from "../store/useAuthUser";
 import { EditPostModal } from "./EditPostModal";
 import { CommentsContainer } from "./CommentsContainer";
 import usePosts from "../store/usePosts";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 type Props = {
   post: Post;
@@ -29,8 +29,6 @@ type Props = {
 export const PostCard = ({ post }: Props) => {
   const authUser = useAuthUser((state) => state.user);
   const { deletePost, likePost, unlikePost } = usePosts((state) => state);
-
-  if (!authUser) return <Navigate to={"/login"} />;
 
   return (
     <Card key={post.id}>
@@ -111,7 +109,7 @@ export const PostCard = ({ post }: Props) => {
         <Flex gap={"1"} align={"center"}>
           {post.likes.find((user) => user.id === authUser?.id) ? (
             <Button
-              onClick={() => unlikePost(post.id, authUser)}
+              onClick={() => unlikePost(post.id, authUser!)}
               variant="surface"
               color="ruby"
             >
@@ -120,7 +118,7 @@ export const PostCard = ({ post }: Props) => {
             </Button>
           ) : (
             <Button
-              onClick={() => likePost(post.id, authUser)}
+              onClick={() => likePost(post.id, authUser!)}
               variant="surface"
               color="ruby"
             >
